@@ -1,0 +1,5 @@
+hr{
+    background-color: var(--bg-muted);
+    margin: var(--space-4) auto;
+    max-width: var(--container-max-width);
+}

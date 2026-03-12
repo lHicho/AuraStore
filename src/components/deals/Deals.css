@@ -1,0 +1,108 @@
+.deals-section {
+    width: 100%;
+    padding: var(--space-8) 0;
+    background-color: var(--bg-main);
+}
+
+.deals-container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-6);
+}
+
+.section-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.title-with-icon {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.hot-icon {
+    color: var(--primary);
+    font-size: 1.8rem;
+}
+
+.see-all-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--primary);
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-fast);
+}
+
+.see-all-btn:hover {
+    gap: var(--space-3);
+    opacity: 0.8;
+}
+
+.deals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-6);
+}
+
+@media (max-width: 768px) {
+    .deals-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: var(--space-3);
+    }
+}
+
+/* Skeleton Loaders */
+.card-skeleton {
+    background: var(--bg-surface);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.skeleton-img,
+.skeleton-title,
+.skeleton-price {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: var(--radius-md);
+}
+
+.skeleton-img {
+    aspect-ratio: 1/1;
+    width: 100%;
+}
+
+.skeleton-title {
+    height: 20px;
+    width: 70%;
+}
+
+.skeleton-price {
+    height: 30px;
+    width: 40%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}

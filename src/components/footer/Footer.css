@@ -1,0 +1,112 @@
+.footer-container{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-inv);
+    color: var(--text-inv);
+}
+.footer-container .go-top-button{
+    background-color: var( --bg-inv-muted);
+    color: var(--text-inv);
+    padding: var(--space-3);
+    font-size: var(--font-size-lg);
+    gap: var(--space-3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main-footer-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: calc(20px + var(--space-12));
+    padding: 70px 50px;
+}
+.company-info{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--space-4);
+}
+.company-info .imgs{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.company-info .imgs img{
+    height: 100px;
+    width: auto;
+    flex-shrink: 0;
+    max-width: none;
+    object-fit: contain;
+    cursor: pointer;
+}
+.company-info .company-text{
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+}
+.side-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: var(--space-1);
+}
+.side-info h1{
+    margin-bottom: var(--space-2);
+    font-size: var(--font-size-lg);
+    color: var(--text-inv);
+    font-weight: 700;
+}
+.side-info a, .side-info p{
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    font-weight: 400;
+    transition: var(--transition-slow);
+}
+.side-info a:hover{
+    color: var(--primary);
+}
+.newsletter form{
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+.newsletter form input{
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-sm);
+    background-color: var(--bg-inv-muted);
+    border: 1px solid var(--border);
+    outline: none;
+    border-radius: var(--radius-md);
+    color: var(--text-inv);
+}
+.newsletter form input::placeholder{
+    color: var(--text-muted);
+}
+.newsletter form button{
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-sm);
+    background-color: var(--primary);
+    border: none;
+    outline: none;
+    border-radius: var(--radius-md);
+    color: var(--text-inv);
+}
+.footer-container hr{
+    opacity: 0.5;
+    margin: 0 var(--space-4);
+}
+.second-footer-container{
+    display: flex;
+    padding: var(--space-10) var(--space-6);
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-muted);
+    font-size: var(--font-size-xs);
+}
+.second-footer-container .legal-links, .second-footer-container .banking-infos{
+    display: flex;
+    gap: var(--space-4);
+}
