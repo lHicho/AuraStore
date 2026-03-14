@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useCartStore } from "../../context/zustand.jsx";
 import { 
     FaStar, 
     FaCartPlus, 
@@ -270,10 +271,28 @@ export default function ProductDetail() {
                                 </div>
 
                                 <div className="purchase-buttons">
-                                    <button className="add-to-cart-btn">
+                                    <button 
+                                        className="add-to-cart-btn"
+                                        onClick={() => {
+                                            const addToCart = useCartStore.getState().addToCart;
+                                            for(let i = 0; i < quantity; i++) {
+                                                addToCart({
+                                                    id: product.id,
+                                                    name: product.name,
+                                                    price: parseFloat(product.price.toString().replace('$', '')),
+                                                    image: product.images[0],
+                                                    brand: product.seller.name,
+                                                    description: product.description,
+                                                    category: "Audio & Tech",
+                                                    limit: 10
+                                                });
+                                            }
+                                            navigate('/cart');
+                                        }}
+                                    >
                                         <FaCartPlus /> Add to Cart
                                     </button>
-                                    <button className="buy-now-btn">Buy Now</button>
+                                    <button className="buy-now-btn" onClick={() => navigate('/cart')}>Buy Now</button>
                                 </div>
 
                                 <div className="pdp-trust-badges stack">

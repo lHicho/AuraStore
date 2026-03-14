@@ -3,61 +3,96 @@ import "./Footer.css";
 import whiteLogo from "../../assets/logoWhite.png"
 import logo from "../../assets/logo.png"
 
-import { FaArrowUp } from "react-icons/fa6";
+import { FaArrowUp, FaFacebook, FaInstagram, FaXTwitter, FaCcVisa, FaCcMastercard, FaPaypal, FaApplePay } from "react-icons/fa6";
 
 
 export default function Footer() {
 
     return (
         <footer className="footer-container">
-            <button onClick={()=>{window.scrollTo({top: 0, behavior: "smooth"})}} className="go-top-button">Go back to top <FaArrowUp /></button>
+            <button 
+                onClick={() => { window.scrollTo({ top: 0, behavior: "smooth" }) }} 
+                className="go-top-button"
+            >
+                <span>Back to Top</span>
+                <FaArrowUp />
+            </button>
+
             <div className="main-footer-container">
                 <div className="company-info">
-                    <div className="imgs">
-                        <img src={logo} alt="logo" />
-                        <img src={whiteLogo} alt="logo" />
+                    <div className="footer-logo-section">
+                        <img src={logo} alt="Aura Store" className="footer-logo" />
                     </div>
-                    <div className="company-text">
-                        The premier marketplace for smoked orange lifestyle products. Quality, design, and innovation delivered to your doorstep.
+                    <p className="company-text">
+                        Aura Store is the premier marketplace for modern lifestyles. We curate high-quality products that blend functionality with state-of-the-art design.
+                    </p>
+                    <div className="footer-socials">
+                        <a href="#" className="footer-social-btn"><FaFacebook /></a>
+                        <a href="#" className="footer-social-btn"><FaInstagram /></a>
+                        <a href="#" className="footer-social-btn"><FaXTwitter /></a>
                     </div>
                 </div>
-                <div className="shop side-info">
-                    <h1>Shop</h1>
-                    <a href="#">Best Sellers</a>
-                    <a href="#">New Arrivals</a>
-                    <a href="#">Trending</a>
-                    <a href="#">Promotions</a>
+
+                <div className="footer-grid">
+                    <div className="footer-col">
+                        <h3>Shop</h3>
+                        <ul className="footer-links">
+                            <li><a href="#">Best Sellers</a></li>
+                            <li><a href="#">New Arrivals</a></li>
+                            <li><a href="#">Categories</a></li>
+                            <li><a href="#">Deals & Offers</a></li>
+                        </ul>
+                    </div>
+
+                    <div className="footer-col">
+                        <h3>Help & Support</h3>
+                        <ul className="footer-links">
+                            <li><a href="#">Track Order</a></li>
+                            <li><a href="#">Returns & Refunds</a></li>
+                            <li><a href="#">Shipping Info</a></li>
+                            <li><a href="#">Help Center</a></li>
+                        </ul>
+                    </div>
+
+                    <div className="footer-col">
+                        <h3>Company</h3>
+                        <ul className="footer-links">
+                            <li><a href="#">About Aura</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div className="company side-info">
-                    <h1>Company</h1>
-                    <a href="#">About Us</a>
-                    <a href="#">Contact Support</a>
-                    <a href="#">Careers</a>
-                    <a href="#">Privacy Policy</a>
-                </div>
-                <div className="newsletter side-info">
-                    <h1>Newsletter</h1>
-                    <p>Get the latest deals and update directly in your inbox.</p>
-                    <form onSubmit={(e) => { e.preventDefault(); console.log("hello") }}>
-                        <input type="emain" placeholder="Your email address" name="email" />
-                        <button type="submit">subscribe</button>
+
+                <div className="newsletter-section">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe for exclusive offers and news.</p>
+                    <form className="footer-form" onSubmit={(e) => { e.preventDefault(); }}>
+                        <div className="input-group">
+                            <input type="email" placeholder="Email Address" required />
+                            <button type="submit">Join</button>
+                        </div>
                     </form>
                 </div>
             </div>
-            <hr />
-            <div className="second-footer-container">
-                <div className="rights">
-                    <p>© 2024 MarketHub E-Commerce Platform. All rights reserved.</p>
-                </div>
-                <div className="legal-links">
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Cookie Settings</a>
-                    <a href="#">Security</a>
-                </div>
-                <div className="banking-infos">
-                    <button>1</button>
-                    <button>2</button>
-                    <button>3</button>
+
+            <div className="bottom-footer">
+                <div className="bottom-content">
+                    <p className="copyright">© 2026 Aura Store Inc. All rights reserved.</p>
+                    
+                    <div className="payment-methods">
+                        <FaCcVisa />
+                        <FaCcMastercard />
+                        <FaPaypal />
+                        <FaApplePay />
+                    </div>
+
+                    <div className="footer-legal">
+                        <a href="#">Legal</a>
+                        <a href="#">Cookies</a>
+                        <a href="#">Sitemap</a>
+                    </div>
                 </div>
             </div>
         </footer>

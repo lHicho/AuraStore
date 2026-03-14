@@ -22,6 +22,7 @@ import { FaThumbsUp } from "react-icons/fa6";
 
 
 import ProductDetail from './components/productDetail/ProductDetail.jsx'
+import Cart from './components/cart/Cart.jsx'
 
 function App() {
   const isLightTheme = useThemeStore((state) => state.light);
@@ -56,6 +57,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
       <BackToTop />
     </Router>
