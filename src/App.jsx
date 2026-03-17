@@ -1,7 +1,8 @@
 import './App.css'
 import { useEffect } from 'react'
 import { useThemeStore } from './context/zustand.jsx'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
+import useReveal from './hooks/useReveal'
 
 import Header from './components/header/Header.jsx'
 import Footer from './components/footer/Footer.jsx'
@@ -23,22 +24,25 @@ import AdminInventory from './components/admin/AdminInventory.jsx'
 import AdminReviews from './components/admin/AdminReviews.jsx'
 import AdminCoupons from './components/admin/AdminCoupons.jsx'
 import AdminNotifications from './components/admin/AdminNotifications.jsx'
+import Checkout from './components/checkout/Checkout.jsx'
 
 function App() {
   const isLightTheme = useThemeStore((state) => state.light);
+  useReveal();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', isLightTheme ? 'light' : 'dark');
   }, [isLightTheme]);
 
   return (
-    <Router>
+    <>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
         
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -54,7 +58,7 @@ function App() {
         <Route path="/admin/notifications" element={<AdminNotifications />} />
       </Routes>
       <BackToTop />
-    </Router>
+    </>
   )
 }
 

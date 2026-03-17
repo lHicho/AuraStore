@@ -11,6 +11,8 @@
 
 .cart-container {
     padding: 0 var(--space-8);
+    display: flex;
+    flex-direction: column;
 }
 
 .cart-header {
@@ -64,6 +66,7 @@
     gap: var(--space-2);
     cursor: pointer;
     transition: transform var(--transition-fast);
+    align-self: center;
 }
 
 .continue-shopping:hover {
@@ -362,6 +365,7 @@
     cursor: pointer;
     box-shadow: 0 8px 25px rgba(255, 85, 0, 0.3);
     transition: all var(--transition-normal);
+    margin-bottom: var(--space-4);
 }
 
 .checkout-btn:hover {

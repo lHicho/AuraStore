@@ -141,7 +141,7 @@ export default function Cart() {
                                     <span>${total.toFixed(2)}</span>
                                 </div>
 
-                                <button className="checkout-btn" onClick={() => console.log("Checkout clicked")}>
+                                <button className="checkout-btn" onClick={() => navigate('/checkout')}>
                                     Proceed to Checkout <FaArrowRight />
                                 </button>
 
