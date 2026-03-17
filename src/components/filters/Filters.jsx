@@ -37,7 +37,11 @@ export default function Filters() {
 
                 <div className="filters-grid">
                     {categories.map((cat) => (
-                        <button key={cat.id} className="filter-card">
+                        <button 
+                            key={cat.id} 
+                            className="filter-card"
+                            onClick={() => window.location.href = `/category/${cat.id}`}
+                        >
                             <div className="filter-icon">
                                 {cat.icon || <span className="all-text">All</span>}
                             </div>

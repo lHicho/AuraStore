@@ -25,6 +25,8 @@ import AdminReviews from './components/admin/AdminReviews.jsx'
 import AdminCoupons from './components/admin/AdminCoupons.jsx'
 import AdminNotifications from './components/admin/AdminNotifications.jsx'
 import Checkout from './components/checkout/Checkout.jsx'
+import Category from './components/category/Category.jsx'
+import SearchResults from './components/search/SearchResults.jsx'
 
 function App() {
   const isLightTheme = useThemeStore((state) => state.light);
@@ -43,6 +45,9 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/category/:categoryId" element={<Category />} />
+        <Route path="/products" element={<Category />} />
+        <Route path="/search" element={<SearchResults />} />
         
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />

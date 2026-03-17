@@ -317,7 +317,7 @@
     padding: var(--space-1);
     box-shadow: var(--shadow-lg);
     z-index: 100;
-    /* Ensure it stays above header-sub */
+    font-family: var(--font-family);
     animation: slideDown var(--transition-fast);
 }
 
@@ -326,7 +326,6 @@
         opacity: 0;
         transform: translateY(-10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -340,6 +339,7 @@
     transition: background var(--transition-fast);
     font-size: var(--font-size-sm);
     color: var(--text-inv);
+    font-family: var(--font-family);
 }
 
 .menu-item:hover {

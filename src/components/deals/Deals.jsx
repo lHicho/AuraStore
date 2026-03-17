@@ -32,7 +32,7 @@ export default function Deals({ title = "Best Deals of Today", icon = <FaFire cl
                         {icon}
                         <h2 className="section-title">{title}</h2>
                     </div>
-                    <button className="see-all-btn">
+                    <button className="see-all-btn" onClick={() => window.location.href = '/products'}>
                         <span>View All Deals</span>
                         <FaChevronRight />
                     </button>

@@ -41,7 +41,11 @@ export default function Header() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Searching for:", formData);
+        if (formData.term.trim()) {
+            navigate(`/search?q=${encodeURIComponent(formData.term)}&category=${formData.filter === 'All' ? '' : formData.filter}`);
+        } else {
+            navigate('/products');
+        }
         closeAllMenus();
     };
 
@@ -226,15 +230,15 @@ export default function Header() {
                         <h4>Shop by Category</h4>
                         <ul className="sidebar-list">
                             {[
-                                { name: "Electronics & Tech", icon: <FaMagnifyingGlass /> },
-                                { name: "Fashion & Apparel", icon: <FaUser /> },
-                                { name: "Home & Garden", icon: <FaLocationDot /> },
-                                { name: "Beauty & Health", icon: <FaThumbsUp /> },
-                                { name: "Sports & Outdoors", icon: <FaCar /> },
-                                { name: "Toys & Games", icon: <FaCaretDown /> },
-                                { name: "Books & Media", icon: <MdLanguage /> }
+                                { name: "Electronics & Tech", icon: <FaMagnifyingGlass />, id: "electronics" },
+                                { name: "Fashion & Apparel", icon: <FaUser />, id: "fashion" },
+                                { name: "Home & Garden", icon: <FaLocationDot />, id: "home" },
+                                { name: "Beauty & Health", icon: <FaThumbsUp />, id: "beauty" },
+                                { name: "Sports & Outdoors", icon: <FaCar />, id: "sports" },
+                                { name: "Toys & Games", icon: <FaCaretDown />, id: "toys" },
+                                { name: "Books & Media", icon: <MdLanguage />, id: "books" }
                             ].map((cat, idx) => (
-                                <li key={idx} className="list-item" onClick={closeAllMenus}>
+                                <li key={idx} className="list-item" onClick={() => { navigate(`/category/${cat.id}`); closeAllMenus(); }}>
                                     <div className="item-main">
                                         <span className="cat-icon">{cat.icon}</span>
                                         <span>{cat.name}</span>
@@ -248,15 +252,15 @@ export default function Header() {
                     <div className="sidebar-section">
                         <h4>Trending Now</h4>
                         <ul className="sidebar-list">
-                            <li className="list-item" onClick={closeAllMenus}>
+                            <li className="list-item" onClick={() => { navigate('/products'); closeAllMenus(); }}>
                                 <span>New Arrivals</span>
                                 <FaAngleRight className="chevron" />
                             </li>
-                            <li className="list-item" onClick={closeAllMenus}>
+                            <li className="list-item" onClick={() => { navigate('/products'); closeAllMenus(); }}>
                                 <span>Best Sellers</span>
                                 <FaAngleRight className="chevron" />
                             </li>
-                            <li className="list-item" onClick={closeAllMenus}>
+                            <li className="list-item" onClick={() => { navigate('/products'); closeAllMenus(); }}>
                                 <span>Flash Deals</span>
                                 <FaAngleRight className="chevron" />
                             </li>

@@ -25,20 +25,29 @@ export default function Card({ product }) {
                 <div className="product-img">
                     <img src={product.image_url} alt={product.name} />
                     <div className="discount">20%</div>
+                    
+                    {/* Inventory Badges */}
+                    <div className="status-badges">
+                        {product.stock < 10 && <span className="badge low-stock">Low Stock</span>}
+                        <span className="badge new">New</span>
+                    </div>
                 </div>
-                <h2>{product.name}</h2>
+                
+                <div className="product-details">
+                    <h2>{product.name}</h2>
+                    <div className="rating">
+                        <FaStar />
+                        <p>4.5 <span>(2.5k reviews)</span></p>
+                    </div>
+                    <div className="price-container">
+                        <div className="price">
+                            <p>{product.price}</p>
+                            <p className="old-price">$200</p>
+                        </div>
+                        <button className="bottom-cart-btn" onClick={handleAddToCart}><FaCartPlus /></button>
+                    </div>
+                </div>
             </Link>
-            <div className="rating">
-                <FaStar />
-                <p>4.5 <span>(2.5k reviews)</span></p>
-            </div>
-            <div className="price-container">
-                <div className="price">
-                    <p>{product.price}</p>
-                    <p className="old-price">$200</p>
-                </div>
-                <button onClick={handleAddToCart}><FaCartPlus /></button>
-            </div>
         </div>
     );
 }

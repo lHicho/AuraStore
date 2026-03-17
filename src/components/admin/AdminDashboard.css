@@ -363,7 +363,7 @@
     background: rgba(255, 255, 255, 0.05);
 }
 
-.product-img {
+.product-item .product-img {
     width: 44px;
     height: 44px;
     background: var(--bg-muted);
