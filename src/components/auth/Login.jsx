@@ -4,6 +4,7 @@ import './Register.css'; // Reusing Register.css for consistent auth styling
 
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../context/zustand.jsx';
+import { supabase } from '../../context/supabase';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -12,17 +13,48 @@ export default function Login() {
         email: '',
         password: ''
     });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Logging in with:', formData);
-        // Mock login
-        setUser({ name: 'User', email: formData.email });
-        navigate('/');
+        setLoading(true);
+        setError(null);
+
+        try {
+            const { data, error: loginError } = await supabase.auth.signInWithPassword({
+                email: formData.email,
+                password: formData.password
+            });
+
+            if (loginError) throw loginError;
+
+            if (data?.user) {
+                setUser(data.user);
+                navigate('/');
+            }
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const signInWithGoogle = async () => {
+        const { data, error: googleError } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                queryParams: {
+                    access_type: 'offline',
+                    prompt: 'consent',
+                },
+            },
+        });
+        if (googleError) setError(googleError.message);
     };
 
 
@@ -39,7 +71,7 @@ export default function Login() {
 
                         <form className="register-form" onSubmit={handleSubmit}>
                             <div className="social-auth-grid">
-                                <button type="button" className="social-btn">
+                                <button type="button" className="social-btn" onClick={signInWithGoogle}>
                                     <FaGoogle />
                                     <span>Google</span>
                                 </button>
@@ -48,6 +80,7 @@ export default function Login() {
                                     <span>Apple</span>
                                 </button>
                             </div>
+                            {error && <div className="auth-error-message" style={{ color: 'var(--error)', fontSize: '0.85rem', textAlign: 'center', margin: '1rem 0', padding: '0.5rem', background: 'rgba(255,0,0,0.1)', borderRadius: '8px' }}>{error}</div>}
                             <div className="auth-divider">
                                 <span>OR</span>
                             </div>
@@ -78,8 +111,8 @@ export default function Login() {
                                 />
                             </div>
 
-                            <button type="submit" className="submit-auth-btn">
-                                <span>Sign In</span>
+                            <button type="submit" className="submit-auth-btn" disabled={loading}>
+                                <span>{loading ? 'Signing In...' : 'Sign In'}</span>
                                 <FaArrowRight />
                             </button>
                         </form>

@@ -1,7 +1,8 @@
 import './App.css'
 import { useEffect } from 'react'
-import { useThemeStore } from './context/zustand.jsx'
+import { useThemeStore, useUserStore } from './context/zustand.jsx'
 import { Routes, Route } from 'react-router-dom'
+import { supabase } from './context/supabase'
 import useReveal from './hooks/useReveal'
 
 import Header from './components/header/Header.jsx'
@@ -30,11 +31,26 @@ import SearchResults from './components/search/SearchResults.jsx'
 
 function App() {
   const isLightTheme = useThemeStore((state) => state.light);
+  const setUser = useUserStore((state) => state.setUser);
   useReveal();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', isLightTheme ? 'light' : 'dark');
   }, [isLightTheme]);
+
+  useEffect(() => {
+    // Check active sessions and sets the user
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    // Listen for changes on auth state (logged in, signed out, etc.)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [setUser]);
 
   return (
     <>

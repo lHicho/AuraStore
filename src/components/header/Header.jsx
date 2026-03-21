@@ -1,15 +1,34 @@
 import { useState, useEffect, useRef } from "react";
-import { useThemeStore, useUserStore, useCartStore } from "../../context/zustand.jsx";
+import { useThemeStore, useUserStore, useCartStore, useLocationStore } from "../../context/zustand.jsx";
 import { FaUser } from "react-icons/fa6";
 import "./Header.css";
 import logo from "../../assets/logo.png";
 import profile from "../../assets/profile.png";
 
-import { FaMagnifyingGlass, FaLocationDot, FaCaretDown, FaMoon, FaBars, FaXmark, FaAngleRight, FaCar, FaThumbsUp, FaFacebook, FaInstagram, FaXTwitter } from "react-icons/fa6";
+import { 
+    FaMagnifyingGlass, 
+    FaLocationDot, 
+    FaCaretDown, 
+    FaMoon, 
+    FaBars, 
+    FaXmark, 
+    FaAngleRight, 
+    FaCar, 
+    FaThumbsUp, 
+    FaFacebook, 
+    FaInstagram, 
+    FaXTwitter,
+    FaCompass
+} from "react-icons/fa6";
 import { MdLanguage } from "react-icons/md";
 import { IoSunny } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
+
+const MOROCCAN_CITIES = [
+    "Casablanca", "Rabat", "Marrakech", "Tangier", "Agadir", 
+    "Fes", "Meknes", "Oujda", "Kenitra", "Tetouan"
+];
 
 export default function Header() {
     const navigate = useNavigate();
@@ -18,6 +37,8 @@ export default function Header() {
         filter: "All",
         term: ""
     });
+    const [showLocationModal, setShowLocationModal] = useState(false);
+    const [showMobileSearch, setShowMobileSearch] = useState(false);
 
     const isLightTheme = useThemeStore((state) => state.light);
     const switchTheme = useThemeStore((state) => state.swichTheme);
@@ -25,6 +46,8 @@ export default function Header() {
     const user = useUserStore((state) => state.user);
     const logout = useUserStore((state) => state.logout);
     const cart = useCartStore((state) => state.cart);
+    const currentCity = useLocationStore((state) => state.city);
+    const setCity = useLocationStore((state) => state.setCity);
 
     const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -46,6 +69,7 @@ export default function Header() {
         } else {
             navigate('/products');
         }
+        setShowMobileSearch(false);
         closeAllMenus();
     };
 
@@ -58,8 +82,12 @@ export default function Header() {
         <>
             {/* Unified Overlay */}
             <div
-                className={`global-overlay ${activeMenu ? "show" : ""}`}
-                onClick={closeAllMenus}
+                className={`global-overlay ${activeMenu || showLocationModal || showMobileSearch ? "show" : ""}`}
+                onClick={() => {
+                    closeAllMenus();
+                    setShowLocationModal(false);
+                    setShowMobileSearch(false);
+                }}
             />
 
             <header className="header">
@@ -78,7 +106,7 @@ export default function Header() {
                         </button>
                     </div>
 
-                    <div className="search-section">
+                    <div className="search-section desktop-only">
                         <form onSubmit={handleSubmit} className="search-form">
                             <div className="filter-dropdown">
                                 <button
@@ -117,10 +145,16 @@ export default function Header() {
                     </div>
 
                     <div className="header-actions">
+                        <div className="action-item search-mobile-trigger">
+                            <button className="icon-btn" onClick={() => setShowMobileSearch(true)}>
+                                <FaMagnifyingGlass />
+                            </button>
+                        </div>
+
                         <div className="action-item location-btn">
-                            <button className="icon-btn">
+                            <button className="icon-btn" onClick={() => setShowLocationModal(true)}>
                                 <FaLocationDot />
-                                <span className="label">New York</span>
+                                <span className="label">{currentCity}</span>
                             </button>
                         </div>
 
@@ -382,6 +416,74 @@ export default function Header() {
                     </div>
                 </div>
             </aside>
+            {/* Location Modal */}
+            {showLocationModal && (
+                <div className="centered-modal location-modal">
+                    <div className="modal-header">
+                        <h3>Choose your location</h3>
+                        <button onClick={() => setShowLocationModal(false)}><FaXmark /></button>
+                    </div>
+                    <div className="modal-body">
+                        <p className="modal-subtitle">Select a city in Morocco to see delivery options and local offers.</p>
+                        
+                        <div className="locate-me-btn" onClick={() => { setCity("Casablanca"); setShowLocationModal(false); }}>
+                            <FaCompass />
+                            <span>Locate Me (Detect Location)</span>
+                        </div>
+
+                        <div className="cities-grid">
+                            {MOROCCAN_CITIES.map(city => (
+                                <button 
+                                    key={city} 
+                                    className={`city-btn ${currentCity === city ? 'active' : ''}`}
+                                    onClick={() => { setCity(city); setShowLocationModal(false); }}
+                                >
+                                    {city}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Mobile Search Overlay */}
+            {showMobileSearch && (
+                <div className="mobile-search-overlay show">
+                    <div className="search-popup-header">
+                        <img src={logo} alt="Logo" className="mini-logo" />
+                        <button className="close-popup" onClick={() => setShowMobileSearch(false)}>
+                            <FaXmark />
+                        </button>
+                    </div>
+                    <form onSubmit={handleSubmit} className="popup-search-form">
+                        <div className="popup-filter-row">
+                            {["All", "Tech", "Beauty", "Fashion", "Home"].map(f => (
+                                <button 
+                                    key={f} 
+                                    type="button"
+                                    className={`popup-filter-pill ${formData.filter === f ? 'active' : ''}`}
+                                    onClick={() => selectFilter(f)}
+                                >
+                                    {f}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="popup-input-wrapper">
+                            <input
+                                autoFocus
+                                type="text"
+                                name="term"
+                                value={formData.term}
+                                onChange={handleChange}
+                                placeholder="Search products..."
+                            />
+                            <button type="submit">
+                                <FaMagnifyingGlass />
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
         </>
     );
 }

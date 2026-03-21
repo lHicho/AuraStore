@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { supabase } from "./supabase";
 
 export const useThemeStore = create(
     persist(
@@ -18,7 +19,10 @@ export const useThemeStore = create(
 export const useUserStore = create((set) => ({
     user: null,
     setUser: (user) => set({ user }),
-    logout: () => set({ user: null })
+    logout: async () => {
+        await supabase.auth.signOut();
+        set({ user: null });
+    }
 }))
 
 export const useCartStore = create((set) => ({
@@ -55,3 +59,15 @@ export const useCartStore = create((set) => ({
     getCartTotal: (state) => state.cart.reduce((total, item) => total + (item.price * item.quantity), 0),
     getCartCount: (state) => state.cart.reduce((count, item) => count + item.quantity, 0)
 }))
+
+export const useLocationStore = create(
+    persist(
+        (set) => ({
+            city: "Casablanca",
+            setCity: (city) => set({ city })
+        }),
+        {
+            name: "location-storage"
+        }
+    )
+)
