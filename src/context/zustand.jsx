@@ -18,10 +18,70 @@ export const useThemeStore = create(
 
 export const useUserStore = create((set) => ({
     user: null,
-    setUser: (user) => set({ user }),
+    profile: null,
+    updateProfileLocally: (updates) =>
+        set((state) => ({
+            profile: { ...(state.profile || {}), ...updates }
+        })),
+    refreshProfile: async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            set({ user: null, profile: null });
+            return;
+        }
+
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .maybeSingle();
+
+        if (error) {
+            set({ user, profile: { ...(user.user_metadata || {}) } });
+            return;
+        }
+
+        set({
+            user,
+            profile: {
+                ...(user.user_metadata || {}),
+                ...(data || {}),
+                email: data?.email || user.email
+            }
+        });
+    },
+    setUser: async (user) => {
+        console.log("Store: setUser with:", user?.email || "mock-user");
+        set({ user });
+        if (user && user.id && !user.id.startsWith('mock-')) { // Skip fetch for mock IDs
+            console.log("Store: Fetching profile for authenticated user:", user.id);
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .maybeSingle();
+            
+            if (error) {
+                console.warn("Store: Error fetching profile. This might occur if the profiles table doesn't exist yet.");
+                set({ profile: { ...(user.user_metadata || {}), email: user.email } });
+            } else {
+                set({
+                    profile: {
+                        ...(user.user_metadata || {}),
+                        ...(data || {}),
+                        email: data?.email || user.email
+                    }
+                });
+            }
+        } else {
+            console.log("Store: Using local user metadata (no external profile fetch).");
+            set({ profile: null });
+        }
+    },
     logout: async () => {
         await supabase.auth.signOut();
-        set({ user: null });
+        set({ user: null, profile: null });
     }
 }))
 

@@ -22,7 +22,8 @@ export default function AdminLogin() {
         setLoading(true);
         setTimeout(() => {
             setUser({ 
-                name: 'Administrator', 
+                id: 'mock-admin',
+                full_name: 'Administrator', 
                 email: formData.adminEmail, 
                 role: 'admin' 
             });

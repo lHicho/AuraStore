@@ -3,7 +3,7 @@ import { useThemeStore, useUserStore, useCartStore, useLocationStore } from "../
 import { FaUser } from "react-icons/fa6";
 import "./Header.css";
 import logo from "../../assets/logo.png";
-import profile from "../../assets/profile.png";
+import defaultProfileImage from "../../assets/profile.png";
 
 import { 
     FaMagnifyingGlass, 
@@ -31,6 +31,7 @@ const MOROCCAN_CITIES = [
 ];
 
 export default function Header() {
+
     const navigate = useNavigate();
     const [activeMenu, setActiveMenu] = useState(null); // 'categories', 'filters', 'lang', 'profile'
     const [formData, setFormData] = useState({
@@ -43,13 +44,17 @@ export default function Header() {
     const isLightTheme = useThemeStore((state) => state.light);
     const switchTheme = useThemeStore((state) => state.swichTheme);
 
-    const user = useUserStore((state) => state.user);
-    const logout = useUserStore((state) => state.logout);
+    const { user, profile, logout } = useUserStore();
     const cart = useCartStore((state) => state.cart);
     const currentCity = useLocationStore((state) => state.city);
     const setCity = useLocationStore((state) => state.setCity);
 
     const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+    useEffect(() => {
+        console.log("Current User:", user);
+        console.log("Current Profile:", profile);
+    }, [user, profile]);
 
     const toggleMenu = (menuName) => {
         setActiveMenu(activeMenu === menuName ? null : menuName);
@@ -77,6 +82,21 @@ export default function Header() {
         setFormData(prev => ({ ...prev, filter }));
         setActiveMenu(null);
     };
+
+    const displayName =
+        profile?.full_name ||
+        profile?.name ||
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        user?.full_name ||
+        user?.name ||
+        user?.email ||
+        "User";
+
+    const avatarUrl =
+        profile?.avatar_url ||
+        user?.user_metadata?.avatar_url ||
+        defaultProfileImage;
 
     return (
         <>
@@ -185,11 +205,11 @@ export default function Header() {
                         {user ? (
                             <div className="action-item profile-section">
                                 <div className="profile-trigger" onClick={() => toggleMenu('profile')}>
-                                    <img src={profile} alt="User profile" />
+                                    <img src={avatarUrl} alt="User profile" />
                                 </div>
                                 {activeMenu === 'profile' && (
                                     <div className="dropdown-menu profile-menu">
-                                        <div className="menu-item">My Profile</div>
+                                        <div className="menu-item" onClick={() => { navigate('/profile'); closeAllMenus(); }}>My Profile</div>
                                         <div className="menu-item">My Orders</div>
                                         <hr style={{ margin: '5px 0', opacity: 0.1 }} />
                                         <div className="menu-item" onClick={() => { logout(); closeAllMenus(); }}>Logout</div>
@@ -311,11 +331,11 @@ export default function Header() {
                         {user ? (
                             <>
                                 <div className="user-avatar">
-                                    <img src={profile} alt="Avatar" />
+                                    <img src={avatarUrl} alt="Avatar" />
                                 </div>
                                 <div className="user-info">
                                     <span className="welcome">Hello,</span>
-                                    <span className="name">{user.user_metadata?.full_name || 'User'}</span>
+                                    <span className="name">{displayName}</span>
                                 </div>
                             </>
                         ) : (
@@ -373,7 +393,7 @@ export default function Header() {
                     <div className="sidebar-section">
                         <h4>Account Settings</h4>
                         <ul className="sidebar-list">
-                            <li className="list-item" onClick={closeAllMenus}><span>Your Account</span></li>
+                            <li className="list-item" onClick={() => { navigate('/profile'); closeAllMenus(); }}><span>Your Account</span></li>
                             <li className="list-item" onClick={switchTheme}>
                                 <span>{isLightTheme ? 'Dark Mode' : 'Light Mode'}</span>
                                 {isLightTheme ? <FaMoon /> : <IoSunny />}

@@ -28,6 +28,7 @@ import AdminNotifications from './components/admin/AdminNotifications.jsx'
 import Checkout from './components/checkout/Checkout.jsx'
 import Category from './components/category/Category.jsx'
 import SearchResults from './components/search/SearchResults.jsx'
+import ProfilePage from './components/profile/ProfilePage.jsx'
 
 function App() {
   const isLightTheme = useThemeStore((state) => state.light);
@@ -39,14 +40,21 @@ function App() {
   }, [isLightTheme]);
 
   useEffect(() => {
-    // Check active sessions and sets the user
+    // Only fetch session and sync if there is no user in the store (like a mock admin)
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      if (session) {
+        setUser(session.user);
+      }
     });
 
-    // Listen for changes on auth state (logged in, signed out, etc.)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    // Listen for changes on auth state
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Supabase Auth Event:", event);
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        setUser(session?.user ?? null);
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -64,6 +72,7 @@ function App() {
         <Route path="/category/:categoryId" element={<Category />} />
         <Route path="/products" element={<Category />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/profile" element={<ProfilePage />} />
         
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />

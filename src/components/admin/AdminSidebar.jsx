@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
     FaChartPie, FaCartShopping, FaBox, FaUsers, 
@@ -11,13 +12,17 @@ import profile from "../../assets/profile.png";
 export default function AdminSidebar() {
     const navigate = useNavigate();
     const location = useLocation();
-    const user = useUserStore((state) => state.user);
-    const logout = useUserStore((state) => state.logout);
+    const { user, profile, logout } = useUserStore();
 
     const handleLogout = () => {
         logout();
         navigate('/admin/login');
     };
+
+    useEffect(() => {
+        console.log("Admin User:", user);
+        console.log("Admin Profile:", profile);
+    }, [user, profile]);
 
     const navItems = [
         { label: 'Overview', path: '/admin/dashboard', icon: <FaChartPie />, group: 'Main' },
@@ -65,7 +70,7 @@ export default function AdminSidebar() {
                     <img src={profile} alt="Admin" />
                 </div>
                 <div className="user-meta">
-                    <span className="user-name">{user?.name || 'Administrator'}</span>
+                    <span className="user-name">{profile?.full_name || profile?.name || user?.user_metadata?.full_name || user?.full_name || user?.name || user?.email || 'Administrator'}</span>
                     <span className="user-role">Super Admin</span>
                 </div>
                 <button onClick={handleLogout} style={{ marginLeft: 'auto', color: 'var(--text-muted)', fontSize: '10px', border: 'none', background: 'none', cursor: 'pointer' }}>Logout</button>
